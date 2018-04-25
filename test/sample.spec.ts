@@ -1,7 +1,10 @@
 import { expect } from "chai";
 import sample from "../lib/sample";
 describe("sample", () => {
-  it("should work", () => {
-    expect(sample(3)).to.equal(5);
+  it("should work", done => {
+    sample(3).subscribe(value => {
+      expect(value).to.equal(3);
+      done();
+    });
   });
 });
