@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { Observable } from "rxjs/Observable";
 import { TestScheduler } from "rxjs";
-import rxSingletonLock from "../lib/rx_singleton_lock";
+import rxSingletonLock from "../lib/rx-singleton-lock";
 
 export default () => {
   const logs: Array<string> = [];
