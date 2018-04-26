@@ -1,90 +1,71 @@
 import { IScheduler } from "rxjs/Scheduler";
 import { Observable } from "rxjs/Observable";
 import { ReplaySubject } from "rxjs/ReplaySubject";
+import { TraceErr, TraceLog, createLog, createErr } from "./utils/tracing";
+import counter from "./utils/counter";
 
-type methodType = "singleton" | "sync";
-export type IRunStream<T> = () => Observable<T>;
-export interface initOptions {
+export type CreateObservable<T> = () => Observable<T>;
+export interface InitOptions {
   scheduler?: IScheduler;
-  traceErr?: (message: string, error: Error) => any;
-  traceLog?: (message: string) => any;
+  traceErr?: TraceErr;
+  traceLog?: TraceLog;
 }
-
-const noop = () => {};
 
 export default function rxSingletonLock({
   scheduler,
   traceLog,
   traceErr
-}: initOptions = {}) {
-  const frame = (method: methodType, seq: number) =>
-    `[${method}:${seq}]${scheduler ? ` [t=${scheduler.now()}]` : ""}`;
-
-  const log = traceLog
-    ? (seq: number, method: methodType, msg: string) =>
-        traceLog(`${frame(method, seq)} ${msg}`)
-    : noop;
-
-  const err = traceErr
-    ? (seq: number, method: methodType, msg: string, e: Error) =>
-        traceErr(`${frame(method, seq)} ${msg}`, e)
-    : noop;
+}: InitOptions = {}) {
+  const log = createLog(traceLog, scheduler);
+  const err = createErr(traceErr, scheduler);
+  const counters = { sync: counter(), singleton: counter() };
 
   let isLocked = false;
   let syncSubject: ReplaySubject<any>;
 
-  let seqSync = 0;
-  let seqLock = 0;
-
   return {
-    singleton<T>(runLockStream: IRunStream<T>) {
-      const thisSeqLock = seqLock;
-      seqLock++;
+    singleton<T>(createObservable: CreateObservable<T>) {
+      const seq = counters.singleton.next();
 
       if (isLocked) {
-        log(thisSeqLock, "singleton", "(ignored) waiting...");
-        return syncSubject.do(() =>
-          log(thisSeqLock, "singleton", "(ignored) ok.")
-        );
+        log(seq, "singleton", "(ignored) waiting...");
+        return syncSubject.do(() => log(seq, "singleton", "(ignored) ok."));
       }
 
+      log(seq, "singleton", "locked.");
       isLocked = true;
       syncSubject = new ReplaySubject(1, undefined, scheduler);
 
-      log(thisSeqLock, "singleton", "locked.");
-
-      return runLockStream().do(
+      return createObservable().do(
         value => {
-          log(thisSeqLock, "singleton", "ok, unlocked.");
+          log(seq, "singleton", "ok, unlocked.");
           isLocked = false;
           syncSubject.next(value);
         },
         e => {
-          err(thisSeqLock, "singleton", "stream failed, unlocking.", e);
+          err(seq, "singleton", "stream failed, unlocking.", e);
           isLocked = false;
           syncSubject.next(e);
         }
       );
     },
 
-    sync<T>(runStream: IRunStream<T>) {
-      const thisSeqSync = seqSync;
-      seqSync++;
-
-      const run = () =>
-        runStream().do(
-          () => log(thisSeqSync, "sync", "stream ok."),
-          () => log(thisSeqSync, "sync", "stream failed.")
+    sync<T>(createObservable: CreateObservable<T>) {
+      const seq = counters.sync.next();
+      const runStream = () =>
+        createObservable().do(
+          () => log(seq, "sync", "stream ok."),
+          () => log(seq, "sync", "stream failed.")
         );
 
       if (!isLocked) {
-        log(thisSeqSync, "sync", "ok.");
-        return run();
+        log(seq, "sync", "ok.");
+        return runStream();
       } else {
-        log(thisSeqSync, "sync", "waiting...");
+        log(seq, "sync", "waiting...");
         return syncSubject.mergeMap(() => {
-          log(thisSeqSync, "sync", "ok.");
-          return run();
+          log(seq, "sync", "ok.");
+          return runStream();
         });
       }
     }
