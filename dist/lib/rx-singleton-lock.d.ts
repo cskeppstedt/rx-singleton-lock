@@ -1,12 +1,13 @@
 import { IScheduler } from "rxjs/Scheduler";
 import { Observable } from "rxjs/Observable";
-export declare type IRunStream<T> = () => Observable<T>;
-export interface initOptions {
+import { TraceErr, TraceLog } from "./utils/tracing";
+export declare type CreateObservable<T> = () => Observable<T>;
+export interface InitOptions {
     scheduler?: IScheduler;
-    traceErr?: (message: string, error: Error) => any;
-    traceLog?: (message: string) => any;
+    traceErr?: TraceErr;
+    traceLog?: TraceLog;
 }
-export default function rxSingletonLock({scheduler, traceLog, traceErr}?: initOptions): {
-    singleton<T>(runLockStream: IRunStream<T>): Observable<any>;
-    sync<T>(runStream: IRunStream<T>): Observable<T>;
+export default function rxSingletonLock({scheduler, traceLog, traceErr}?: InitOptions): {
+    singleton<T>(createObservable: CreateObservable<T>): Observable<any>;
+    sync<T>(createObservable: CreateObservable<T>): Observable<T>;
 };

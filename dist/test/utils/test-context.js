@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
 var rxjs_1 = require("rxjs");
-var rx_singleton_lock_1 = require("../lib/rx-singleton-lock");
+var rx_singleton_lock_1 = require("../../lib/rx-singleton-lock");
 exports.default = (function () {
     var logs = [];
     var errs = [];
