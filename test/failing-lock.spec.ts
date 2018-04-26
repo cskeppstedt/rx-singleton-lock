@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import testContext from "./test-context";
+import testContext from "./utils/test-context";
 
 describe("rx-singleton-lock", () => {
   it("should unblock syncs when the lock stream throws", () => {
