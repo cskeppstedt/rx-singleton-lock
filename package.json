@@ -8,8 +8,8 @@
   "scripts": {
     "start": "tsc -w -p .",
     "format": "prettier --write package.json index.ts lib/**/* test/**/*",
-    "test": "mocha --compilers ts:ts-node/register 'test/**/*.spec.ts'",
-    "test:watch": "npm run test -- --watch",
+    "test": "mocha --require ts-node/register 'test/*.spec.ts'",
+    "test:watch": "npm run test -- --watch --watch-extensions ts",
     "prepublishOnly": "npm run compile",
     "compile": "npm run clean && tsc -p .",
     "clean": "rm -rf dist"

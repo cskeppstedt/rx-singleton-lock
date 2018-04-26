@@ -1,2 +1,6 @@
-declare const _default: () => number;
-export default _default;
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/observable/of";
+declare const rxSingletonLock: () => {
+    singleton(): Observable<string>;
+};
+export default rxSingletonLock;

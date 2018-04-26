@@ -1,3 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (function () { return 3 + 2; });
+var Observable_1 = require("rxjs/Observable");
+require("rxjs/add/observable/of");
+exports.default = (function (n) { return Observable_1.Observable.of(n); });

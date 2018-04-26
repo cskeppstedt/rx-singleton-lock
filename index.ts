@@ -1,13 +1,2 @@
-import sample from "./lib/sample";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/observable/of";
-
-const rxSingletonLock = () => {
-  return {
-    singleton() {
-      return Observable.of("foo");
-    }
-  };
-};
-
+import rxSingletonLock from "./lib/rx_singleton_lock";
 export default rxSingletonLock;
