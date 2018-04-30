@@ -4,7 +4,8 @@
     "lib": ["es5", "es2015", "dom"],
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "jsx": "react"
   },
   "include": ["test/**/*.ts", "lib/**/*.ts", "index.ts"]
 }

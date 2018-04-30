@@ -1,10 +1,7 @@
-import { Observable } from "rxjs/Observable";
 import { TestScheduler } from "rxjs";
+import RxSingletonLock from "../../lib/rx-singleton-lock";
 declare const _default: () => {
-    lock: {
-        singleton<T>(createObservable: () => Observable<T>): Observable<any>;
-        sync<T>(createObservable: () => Observable<T>): Observable<T>;
-    };
+    lock: RxSingletonLock;
     logs: string[];
     errs: string[];
     scheduler: TestScheduler;

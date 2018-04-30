@@ -7,7 +7,7 @@ exports.default = (function () {
     var logs = [];
     var errs = [];
     var scheduler = new rxjs_1.TestScheduler(chai_1.assert.deepEqual.bind(chai_1.assert));
-    var lock = rx_singleton_lock_1.default({
+    var lock = new rx_singleton_lock_1.default({
         scheduler: scheduler,
         traceErr: function (msg, e) { return errs.push(msg); },
         traceLog: function (msg) { return logs.push(msg); }
