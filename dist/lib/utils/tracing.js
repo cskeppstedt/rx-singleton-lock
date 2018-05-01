@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var noop = function () { };
+exports.noop = function () {
+    // do nothing
+};
 var frameWithoutScheduler = function (seq, method) {
     return "[" + method + ":" + seq + "]";
 };
@@ -11,7 +13,7 @@ var createFormatter = function (scheduler) {
 };
 exports.createLog = function (traceLog, scheduler) {
     if (traceLog == null) {
-        return noop;
+        return exports.noop;
     }
     else {
         var formatter_1 = createFormatter(scheduler);
@@ -22,7 +24,7 @@ exports.createLog = function (traceLog, scheduler) {
 };
 exports.createErr = function (traceErr, scheduler) {
     if (traceErr == null) {
-        return noop;
+        return exports.noop;
     }
     else {
         var formatter_2 = createFormatter(scheduler);

@@ -1,11 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { Observable, forkJoin, of } from "rxjs";
+import { delay, tap } from "rxjs/operators";
 import RxSingletonLock from "../lib/rx-singleton-lock";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/delay";
-import "rxjs/add/observable/forkJoin";
-import "rxjs/add/observable/of";
 
 interface ExampleProps {}
 interface ExampleState {
@@ -37,7 +34,7 @@ class Example extends React.Component<ExampleProps, ExampleState> {
   handleSync() {
     const value = valueCounter++;
     this.state.lock
-      .sync(() => Observable.of(value))
+      .sync(() => of(value))
       .subscribe(
         n => console.log(`(sync) ${value}, got value: ${n}`),
         e => console.error(`(sync) ${value}, got err: ${e}`),
@@ -47,9 +44,9 @@ class Example extends React.Component<ExampleProps, ExampleState> {
 
   handleForkJoinSync() {
     const value = valueCounter++;
-    Observable.forkJoin(
-      this.state.lock.sync(() => Observable.of(20).delay(600)),
-      this.state.lock.sync(() => Observable.of(10).delay(100))
+    forkJoin(
+      this.state.lock.sync(() => of(20).pipe(delay(600))),
+      this.state.lock.sync(() => of(10).pipe(delay(100)))
     ).subscribe(
       n => console.log(`(forkJoin-sync) ${value}, got value: ${n}`),
       e => console.error(`(forkJoin-sync) ${value}, got err: ${e}`),
@@ -61,10 +58,12 @@ class Example extends React.Component<ExampleProps, ExampleState> {
     const value = valueCounter++;
     this.state.lock
       .singleton(() =>
-        Observable.of(value).delay(
-          this.state.lockDuration === ""
-            ? defaultLockDuration
-            : this.state.lockDuration
+        of(value).pipe(
+          delay(
+            this.state.lockDuration === ""
+              ? defaultLockDuration
+              : this.state.lockDuration
+          )
         )
       )
       .subscribe(
