@@ -8,6 +8,8 @@ before_script:
 script:
   - npm test
   - ./bin/check_git_clean.sh
+after_script:
+  - killall webpack-serve
 deploy:
   provider: npm
   email: c.skeppstedt@gmail.com
