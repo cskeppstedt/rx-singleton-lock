@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import testContext from "./utils/test-context";
+import testContext from "../utils/test-context";
 
 describe("rx-singleton-lock", () => {
   it("should support syncing without locking", () => {

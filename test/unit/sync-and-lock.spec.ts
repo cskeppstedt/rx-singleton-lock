@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import testContext from "./utils/test-context";
+import testContext from "../utils/test-context";
 
 describe("rx-singleton-lock", () => {
-  it("should unblock syncs when the lock stream throws", () => {
+  it("should support syncing and locking", () => {
     const [
       mSourceA,
       mSourceB,
@@ -12,13 +12,13 @@ describe("rx-singleton-lock", () => {
       mExpectedSingletonA,
       mExpectedSingletonB
     ] = [
-      "a", // sourceA$ emits directly
+      "a|", // sourceA$ emits directly
       "b|", // sourceB$ emits directly
-      "--#|", // lock$ throws after a while
-      "--1", // result from syncing sourceA$ emits when lock has emitted
-      "--2|", // result from syncing sourceB$ emits when lock has emitted
-      "--#", // result from singletonA emits when lock$ has emitted
-      "--#" // result from singletonB emits when lock$ has emitted
+      "--c|", // lock$ emits and completes after a while
+      "---1|", // result from syncing sourceA$ emits when lock has completed
+      "---2|", // result from syncing sourceB$ emits when lock has completed
+      "--x|", // result from singletonA emits when lock$ has completed
+      "--y|" // result from singletonB emits when lock$ has completed
     ];
 
     const { lock, scheduler, errs, logs } = testContext();
@@ -33,7 +33,7 @@ describe("rx-singleton-lock", () => {
       scheduler.expectObservable(resultSourceA$).toBe(mExpectedA, { "1": "a" });
       scheduler
         .expectObservable(resultSingletonA$)
-        .toBe(mExpectedSingletonA, { x: "error" });
+        .toBe(mExpectedSingletonA, { x: "c" });
     }, 0);
 
     scheduler.schedule(() => {
@@ -45,25 +45,25 @@ describe("rx-singleton-lock", () => {
       const resultSingletonB$ = lock.singleton(() => lock$);
       scheduler
         .expectObservable(resultSingletonB$)
-        .toBe(mExpectedSingletonB, { y: "error" });
+        .toBe(mExpectedSingletonB, { y: "c" });
     }, 18);
 
     // run tests
     scheduler.flush();
-    expect(errs).to.eql([
-      "[singleton:0] [t=20] stream failed, unlocking.",
-      "[singleton:1] [t=20] (ignored) stream failed."
-    ]);
+    expect(errs).to.eql([]);
     expect(logs).to.eql([
       "[singleton:0] [t=0] locked.",
       "[sync:0] [t=0] waiting...",
       "[sync:1] [t=15] waiting...",
       "[singleton:1] [t=18] (ignored) waiting...",
-      "[sync:0] [t=20] ok.",
-      "[sync:1] [t=20] ok.",
-      "[sync:0] [t=20] stream emit.",
-      "[sync:1] [t=20] stream emit.",
-      "[sync:1] [t=30] stream completed."
+      "[singleton:0] [t=30] stream completed, unlocked.",
+      "[sync:0] [t=30] ok.",
+      "[sync:1] [t=30] ok.",
+      "[singleton:1] [t=30] (ignored) stream completed.",
+      "[sync:0] [t=30] stream emit.",
+      "[sync:1] [t=30] stream emit.",
+      "[sync:0] [t=40] stream completed.",
+      "[sync:1] [t=40] stream completed."
     ]);
   });
 });

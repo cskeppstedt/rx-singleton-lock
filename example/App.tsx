@@ -11,14 +11,17 @@ interface ExampleProps {}
 interface ExampleState {
   log: Array<string>;
   lock: RxSingletonLock;
+  lockDuration: number | "";
 }
 
 let valueCounter = 0;
+const defaultLockDuration = 3000;
 
 class Example extends React.Component<ExampleProps, ExampleState> {
   constructor(props) {
     super(props);
     this.state = {
+      lockDuration: "",
       log: [],
       lock: new RxSingletonLock({
         traceErr: this.appendLog.bind(this),
@@ -57,7 +60,13 @@ class Example extends React.Component<ExampleProps, ExampleState> {
   handleLock() {
     const value = valueCounter++;
     this.state.lock
-      .singleton(() => Observable.of(value).delay(3000))
+      .singleton(() =>
+        Observable.of(value).delay(
+          this.state.lockDuration === ""
+            ? defaultLockDuration
+            : this.state.lockDuration
+        )
+      )
       .subscribe(
         n => console.log(`(lock) ${value}, got value: ${n}`),
         e => console.error(`(lock) ${value}, got err: ${e}`),
@@ -77,17 +86,43 @@ class Example extends React.Component<ExampleProps, ExampleState> {
     });
   }
 
+  handleSetLockDuration(e: React.ChangeEvent<HTMLInputElement>) {
+    const text = e.target.value.trim();
+    const lockDuration = text === "" ? text : parseInt(text) || 0;
+    this.setState(s => ({ ...s, lockDuration }));
+  }
+
   render() {
     return (
       <div>
-        <button onClick={this.handleSync.bind(this)}>Sync</button>
-        <button onClick={this.handleForkJoinSync.bind(this)}>
+        <button data-id="sync" onClick={this.handleSync.bind(this)}>
+          Sync
+        </button>
+        <button
+          data-id="sync-forkjoin"
+          onClick={this.handleForkJoinSync.bind(this)}
+        >
           Sync (forkJoin)
         </button>
-        <button onClick={this.handleLock.bind(this)}>Lock</button>
-        <button onClick={this.handleReset.bind(this)}>Reset</button>
-        <ul style={{ fontFamily: "monospace" }}>
-          {this.state.log.map((msg, i) => <li key={i}>{msg}</li>)}
+        <button data-id="lock" onClick={this.handleLock.bind(this)}>
+          Lock
+        </button>
+        <button data-id="data-reset" onClick={this.handleReset.bind(this)}>
+          Reset
+        </button>
+        <input
+          data-id="lock-duration"
+          placeholder={`Lock duration (default ${defaultLockDuration}ms)`}
+          onChange={this.handleSetLockDuration.bind(this)}
+          value={this.state.lockDuration}
+          size={30}
+        />
+        <ul data-id="message-list" style={{ fontFamily: "monospace" }}>
+          {this.state.log.map((msg, i) => (
+            <li data-id={`message-item-${i}`} key={i}>
+              {msg}
+            </li>
+          ))}
         </ul>
       </div>
     );
