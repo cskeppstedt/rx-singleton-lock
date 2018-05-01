@@ -3,10 +3,9 @@ node_js:
 - '8'
 before_script: 
   - npm run format
-  - npm run serve -- --log-level error &
-before_deploy:
-  - npm run build && git diff-index HEAD
-script: npm run lint && npm test && git diff-index HEAD
+  - npm run build
+  - npm run serve &
+script: npm test && git diff-index--quiet HEAD && git status
 deploy:
   provider: npm
   email: c.skeppstedt@gmail.com
