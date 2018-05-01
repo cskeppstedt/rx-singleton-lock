@@ -5,7 +5,7 @@ import elementsHtml from "../utils/elements-html";
 describe("integration example", () => {
   let browser: puppeteer.Browser;
   let page: puppeteer.Page;
-  let consoleLogs: Array<string>;
+  let consoleLogs: string[];
 
   before(async () => {
     browser = await puppeteer.launch({ args: ["--no-sandbox"] });

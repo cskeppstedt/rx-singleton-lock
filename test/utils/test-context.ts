@@ -3,8 +3,8 @@ import { TestScheduler } from "rxjs/testing";
 import RxSingletonLock from "../../lib/rx-singleton-lock";
 
 export default () => {
-  const logs: Array<string> = [];
-  const errs: Array<string> = [];
+  const logs: string[] = [];
+  const errs: string[] = [];
   const scheduler = new TestScheduler(assert.deepEqual.bind(assert));
   const lock = new RxSingletonLock({
     scheduler,

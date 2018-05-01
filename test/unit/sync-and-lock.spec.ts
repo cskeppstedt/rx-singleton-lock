@@ -27,8 +27,8 @@ describe("rx-singleton-lock", () => {
     const lock$ = scheduler.createHotObservable(mLock);
 
     scheduler.schedule(() => {
-      const resultSingletonA$ = lock.singleton(() => lock$);
-      const resultSourceA$ = lock.sync(() => sourceA$);
+      const resultSingletonA$ = lock.singleton(lock$);
+      const resultSourceA$ = lock.sync(sourceA$);
 
       scheduler.expectObservable(resultSourceA$).toBe(mExpectedA, { "1": "a" });
       scheduler
@@ -37,12 +37,12 @@ describe("rx-singleton-lock", () => {
     }, 0);
 
     scheduler.schedule(() => {
-      const resultSourceB$ = lock.sync(() => sourceB$);
+      const resultSourceB$ = lock.sync(sourceB$);
       scheduler.expectObservable(resultSourceB$).toBe(mExpectedB, { "2": "b" });
     }, 15);
 
     scheduler.schedule(() => {
-      const resultSingletonB$ = lock.singleton(() => lock$);
+      const resultSingletonB$ = lock.singleton(lock$);
       scheduler
         .expectObservable(resultSingletonB$)
         .toBe(mExpectedSingletonB, { y: "c" });

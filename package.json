@@ -5,7 +5,7 @@
     "start": "webpack-dev-server",
     "serve":
       "webpack-serve --config ./example/webpack.config.js --port 8080 --log-level warn --no-clipboard",
-    "build": "rm -rf dist && tsc -p .",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "format":
       "prettier --write index.ts package.json webpack.config.js lib/**/* test/**/*",
     "lint": "tslint -c tslint.json -p tsconfig.json",
