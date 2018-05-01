@@ -15,6 +15,7 @@
       "npm run test:integration -- --watch --watch-extensions ts"
   },
   "description": "A small util that provides singleton locks for rxjs streams.",
+  "license": "mit",
   "files": ["dist/index.js", "dist/index.d.ts", "dist/lib"],
   "main": "dist/index",
   "typings": "dist/index.d.ts",
