@@ -3,7 +3,7 @@ node_js:
 - '8'
 before_script: 
   - npm run format
-  - npm start &
+  - npm run serve -- --log-level error &
 before_deploy:
   - npm run build && git diff-index HEAD
 script: npm run lint && npm test && git diff-index HEAD
