@@ -1,2 +1,11 @@
-tsconfig.json
+example
+lib
+test
 dist/test
+.vscode
+.gitignore
+.npmignore
+.travis.yml
+index.ts
+tsconfig.json
+webpack.config.js
