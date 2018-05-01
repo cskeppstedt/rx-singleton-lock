@@ -1,3 +1,11 @@
 language: node_js
 node_js:
-  - "8"
+- '8'
+deploy:
+  provider: npm
+  email: c.skeppstedt@gmail.com
+  api_key:
+    secure: c2odWUQpi/D+OjcKAYy0ovRrdSuitXBHTOeO/YuaNfdmE3FvDSKJA5bkwhL15DQp73IcRk5a0IxJLE/rFQ4qtLMYadF8qVjDYDigoTd5XN9nxVJ2JGAgPw6ZwajtC1H/ri4epilFzmaJftfOAOSkKtPLPBEBryO1X14F9ZtmaYR/R09ocxEgLAypJwXxLT6TidB6uFNZ2wO4+J6DuPh4CwDZDUIRs8LXrR669hUYklfA7gFQhq9DVpqBeNh/LvD9PEGyYu6pACEuT+zcEBfM/q+ixg2AcBNZ3t+4GSUkGVMkJJSz3ofyPn9E15vArVFjxOfED+OSImtO4NSKUBuzFNxP1715x/er9gqmoy0D7h93l9derxEVity4Nkt6BAOn1KXF90OJCUSwXzukNqn1PL1Nya8pmpMzsI+D4W8QYLviZGN5LksN7k9sI2EBtsECUcPnBxss3RGGuKDOSh17Ffa2FUoPjSas45HkDzofb2BFTzSHajZ5uddLIWe8qLqWB8JXCeofsdRtjg1pVc06ArfBekVu2d6/1pfzmXs5de0sLRl8hcOD3JL7/exR33wQb+40FO9Pyk9MHyB/d73d2fPztclR/ZjG1sbNM01D1d0qSJAyiZKkrKS1YUyW/7B31ebl2oScAftmianfLUm5fk5dRG5mqWTbrVThKOefN54=
+  on:
+    tags: true
+    repo: cskeppstedt/rx-singleton-lock
