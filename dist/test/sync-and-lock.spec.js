@@ -8,10 +8,10 @@ describe("rx-singleton-lock", function () {
             "a|",
             "b|",
             "--c|",
-            "--1|",
-            "--2|",
+            "---1|",
+            "---2|",
             "--x|",
-            "--y" // result from singletonB emits when lock$ has emitted
+            "--y|" // result from singletonB emits when lock$ has completed
         ], mSourceA = _a[0], mSourceB = _a[1], mLock = _a[2], mExpectedA = _a[3], mExpectedB = _a[4], mExpectedSingletonA = _a[5], mExpectedSingletonB = _a[6];
         var _b = test_context_1.default(), lock = _b.lock, scheduler = _b.scheduler, errs = _b.errs, logs = _b.logs;
         var sourceA$ = scheduler.createColdObservable(mSourceA);
@@ -43,12 +43,14 @@ describe("rx-singleton-lock", function () {
             "[sync:0] [t=0] waiting...",
             "[sync:1] [t=15] waiting...",
             "[singleton:1] [t=18] (ignored) waiting...",
-            "[singleton:0] [t=20] ok, unlocked.",
-            "[sync:0] [t=20] ok.",
-            "[sync:1] [t=20] ok.",
-            "[singleton:1] [t=20] (ignored) ok.",
-            "[sync:0] [t=20] stream ok.",
-            "[sync:1] [t=20] stream ok."
+            "[singleton:0] [t=30] stream completed, unlocked.",
+            "[sync:0] [t=30] ok.",
+            "[sync:1] [t=30] ok.",
+            "[singleton:1] [t=30] (ignored) stream completed.",
+            "[sync:0] [t=30] stream emit.",
+            "[sync:1] [t=30] stream emit.",
+            "[sync:0] [t=40] stream completed.",
+            "[sync:1] [t=40] stream completed."
         ]);
     });
 });

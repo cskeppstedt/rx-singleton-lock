@@ -6,12 +6,12 @@ describe("rx-singleton-lock", function () {
     it("should unblock syncs when the lock stream throws", function () {
         var _a = [
             "a",
-            "b",
+            "b|",
             "--#|",
             "--1",
-            "--2",
+            "--2|",
             "--#",
-            "--y" // result from singletonB emits when lock$ has emitted
+            "--#" // result from singletonB emits when lock$ has emitted
         ], mSourceA = _a[0], mSourceB = _a[1], mLock = _a[2], mExpectedA = _a[3], mExpectedB = _a[4], mExpectedSingletonA = _a[5], mExpectedSingletonB = _a[6];
         var _b = test_context_1.default(), lock = _b.lock, scheduler = _b.scheduler, errs = _b.errs, logs = _b.logs;
         var sourceA$ = scheduler.createColdObservable(mSourceA);
@@ -37,7 +37,10 @@ describe("rx-singleton-lock", function () {
         }, 18);
         // run tests
         scheduler.flush();
-        chai_1.expect(errs).to.eql(["[singleton:0] [t=20] stream failed, unlocking."]);
+        chai_1.expect(errs).to.eql([
+            "[singleton:0] [t=20] stream failed, unlocking.",
+            "[singleton:1] [t=20] (ignored) stream failed."
+        ]);
         chai_1.expect(logs).to.eql([
             "[singleton:0] [t=0] locked.",
             "[sync:0] [t=0] waiting...",
@@ -45,9 +48,9 @@ describe("rx-singleton-lock", function () {
             "[singleton:1] [t=18] (ignored) waiting...",
             "[sync:0] [t=20] ok.",
             "[sync:1] [t=20] ok.",
-            "[singleton:1] [t=20] (ignored) ok.",
-            "[sync:0] [t=20] stream ok.",
-            "[sync:1] [t=20] stream ok."
+            "[sync:0] [t=20] stream emit.",
+            "[sync:1] [t=20] stream emit.",
+            "[sync:1] [t=30] stream completed."
         ]);
     });
 });
