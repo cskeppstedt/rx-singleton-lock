@@ -7,5 +7,5 @@
     "outDir": "./dist",
     "jsx": "react"
   },
-  "include": ["test/**/*.ts", "lib/**/*.ts", "index.ts"]
+  "include": ["lib/**/*.ts", "index.ts"]
 }
