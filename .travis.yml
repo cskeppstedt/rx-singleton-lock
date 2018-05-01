@@ -5,8 +5,8 @@ before_script:
   - npm run format
   - npm start &
 before_deploy:
-  - npm run build && git diff-index --quiet HEAD
-script: npm run lint && npm test && git diff-index --quiet HEAD
+  - npm run build && git diff-index HEAD
+script: npm run lint && npm test && git diff-index HEAD
 deploy:
   provider: npm
   email: c.skeppstedt@gmail.com

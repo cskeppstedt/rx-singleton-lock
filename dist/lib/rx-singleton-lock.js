@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var rxjs_1 = require("rxjs");
-var tracing_1 = require("./utils/tracing");
 var operators_1 = require("rxjs/operators");
 var counter_1 = require("./utils/counter");
+var tracing_1 = require("./utils/tracing");
 var RxSingletonLock = /** @class */ (function () {
     function RxSingletonLock(_a) {
         var _b = _a === void 0 ? {} : _a, scheduler = _b.scheduler, traceLog = _b.traceLog, traceErr = _b.traceErr;
@@ -17,13 +17,13 @@ var RxSingletonLock = /** @class */ (function () {
         var seq = this.counters.singleton.next();
         if (this.isLocked) {
             this.log(seq, "singleton", "(ignored) waiting...");
-            return this.lockSubject.pipe(operators_1.tap(function () { }, function (e) { return _this.err(seq, "singleton", "(ignored) stream failed.", e); }, function () { return _this.log(seq, "singleton", "(ignored) stream completed."); }));
+            return this.lockSubject.pipe(operators_1.tap(tracing_1.noop, function (e) { return _this.err(seq, "singleton", "(ignored) stream failed.", e); }, function () { return _this.log(seq, "singleton", "(ignored) stream completed."); }));
         }
         this.log(seq, "singleton", "locked.");
         this.isLocked = true;
         this.syncSubject = new rxjs_1.ReplaySubject(1, undefined, this.scheduler);
         this.lockSubject = createObservable().pipe(operators_1.share());
-        return this.lockSubject.pipe(operators_1.tap(function () { }, function (e) {
+        return this.lockSubject.pipe(operators_1.tap(tracing_1.noop, function (e) {
             _this.err(seq, "singleton", "stream failed, unlocking.", e);
             _this.isLocked = false;
             _this.syncSubject.next(e);

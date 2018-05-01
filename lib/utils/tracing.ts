@@ -4,7 +4,9 @@ export type TraceErr = (message: string, error: Error) => any;
 export type TraceLog = (message: string) => any;
 export type methodType = "singleton" | "sync";
 
-const noop = () => {};
+export const noop = () => {
+  // do nothing
+};
 
 const frameWithoutScheduler = (seq: number, method: methodType) =>
   `[${method}:${seq}]`;

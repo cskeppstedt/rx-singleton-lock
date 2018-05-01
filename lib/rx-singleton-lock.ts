@@ -1,7 +1,13 @@
 import { Observable, ReplaySubject, Scheduler } from "rxjs";
-import { TraceErr, TraceLog, createLog, createErr } from "./utils/tracing";
-import { tap, share, switchMap, take } from "rxjs/operators";
+import { share, switchMap, take, tap } from "rxjs/operators";
 import counter from "./utils/counter";
+import {
+  createErr,
+  createLog,
+  noop,
+  TraceErr,
+  TraceLog
+} from "./utils/tracing";
 
 export type CreateObservable<T> = () => Observable<T>;
 
@@ -27,14 +33,14 @@ export default class RxSingletonLock {
     this.isLocked = false;
   }
 
-  singleton<T>(createObservable: CreateObservable<T>): Observable<T> {
+  public singleton<T>(createObservable: CreateObservable<T>): Observable<T> {
     const seq = this.counters.singleton.next();
 
     if (this.isLocked) {
       this.log(seq, "singleton", "(ignored) waiting...");
       return this.lockSubject.pipe(
         tap(
-          () => {},
+          noop,
           e => this.err(seq, "singleton", "(ignored) stream failed.", e),
           () => this.log(seq, "singleton", "(ignored) stream completed.")
         )
@@ -48,7 +54,7 @@ export default class RxSingletonLock {
 
     return this.lockSubject.pipe(
       tap(
-        () => {},
+        noop,
         e => {
           this.err(seq, "singleton", "stream failed, unlocking.", e);
           this.isLocked = false;
@@ -63,7 +69,7 @@ export default class RxSingletonLock {
     );
   }
 
-  sync<T>(createObservable: CreateObservable<T>): Observable<T> {
+  public sync<T>(createObservable: CreateObservable<T>): Observable<T> {
     const seq = this.counters.sync.next();
     const runStream = () =>
       createObservable().pipe(
