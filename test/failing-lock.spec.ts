@@ -63,7 +63,7 @@ describe("rx-singleton-lock", () => {
       "[sync:1] [t=20] ok.",
       "[sync:0] [t=20] stream emit.",
       "[sync:1] [t=20] stream emit.",
-      "[sync:1] [t=30] stream complete."
+      "[sync:1] [t=30] stream completed."
     ]);
   });
 });

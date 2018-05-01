@@ -31,14 +31,16 @@ export default class RxSingletonLock {
     this.counters = { sync: counter(), singleton: counter() };
     this.isLocked = false;
   }
+
   singleton<T>(createObservable: CreateObservable<T>): Observable<T> {
     const seq = this.counters.singleton.next();
 
     if (this.isLocked) {
       this.log(seq, "singleton", "(ignored) waiting...");
       return this.lockSubject.do(
-        () => this.log(seq, "singleton", "(ignored) ok."),
-        e => this.err(seq, "singleton", "(ignored) stream failed.", e)
+        () => {},
+        e => this.err(seq, "singleton", "(ignored) stream failed.", e),
+        () => this.log(seq, "singleton", "(ignored) stream completed.")
       );
     }
 
@@ -46,16 +48,18 @@ export default class RxSingletonLock {
     this.isLocked = true;
     this.syncSubject = new ReplaySubject(1, undefined, this.scheduler);
     this.lockSubject = createObservable().share();
+
     return this.lockSubject.do(
-      value => {
-        this.log(seq, "singleton", "stream emit, unlocked.");
-        this.isLocked = false;
-        this.syncSubject.next(value);
-      },
+      () => {},
       e => {
         this.err(seq, "singleton", "stream failed, unlocking.", e);
         this.isLocked = false;
         this.syncSubject.next(e);
+      },
+      value => {
+        this.log(seq, "singleton", "stream completed, unlocked.");
+        this.isLocked = false;
+        this.syncSubject.next(value);
       }
     );
   }
@@ -66,7 +70,7 @@ export default class RxSingletonLock {
       createObservable().do(
         () => this.log(seq, "sync", "stream emit."),
         () => this.log(seq, "sync", "stream failed."),
-        () => this.log(seq, "sync", "stream complete.")
+        () => this.log(seq, "sync", "stream completed.")
       );
 
     if (!this.isLocked) {
