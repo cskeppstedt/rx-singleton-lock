@@ -9,6 +9,8 @@ npm install rx-singleton-lock --save
 yarn add rx-singleton-lock
 ```
 
+_Note: requires `rxjs@^6.0.0`._
+
 ## Usage
 
 ```javascript
