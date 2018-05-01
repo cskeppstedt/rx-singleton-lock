@@ -1,4 +1,4 @@
-import { IScheduler } from "rxjs/Scheduler";
+import { Scheduler } from "rxjs";
 
 export type TraceErr = (message: string, error: Error) => any;
 export type TraceLog = (message: string) => any;
@@ -12,15 +12,15 @@ const frameWithoutScheduler = (seq: number, method: methodType) =>
 const frameWithScheduler = (
   seq: number,
   method: methodType,
-  scheduler: IScheduler
+  scheduler: Scheduler
 ) => `${frameWithoutScheduler(seq, method)} [t=${scheduler.now()}]`;
 
-const createFormatter = (scheduler?: IScheduler) => {
+const createFormatter = (scheduler?: Scheduler) => {
   const frame = scheduler == null ? frameWithoutScheduler : frameWithScheduler;
   return (seq, method, msg) => `${frame(seq, method, scheduler)} ${msg}`;
 };
 
-export const createLog = (traceLog?: TraceLog, scheduler?: IScheduler) => {
+export const createLog = (traceLog?: TraceLog, scheduler?: Scheduler) => {
   if (traceLog == null) {
     return noop;
   } else {
@@ -30,7 +30,7 @@ export const createLog = (traceLog?: TraceLog, scheduler?: IScheduler) => {
   }
 };
 
-export const createErr = (traceErr?: TraceErr, scheduler?: IScheduler) => {
+export const createErr = (traceErr?: TraceErr, scheduler?: Scheduler) => {
   if (traceErr == null) {
     return noop;
   } else {

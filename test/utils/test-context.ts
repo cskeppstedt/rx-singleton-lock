@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { TestScheduler } from "rxjs";
+import { TestScheduler } from "rxjs/testing";
 import RxSingletonLock from "../../lib/rx-singleton-lock";
 
 export default () => {
