@@ -26,8 +26,10 @@ describe("rx-singleton-lock", () => {
     expect(logs).to.eql([
       "[sync:0] [t=0] ok.",
       "[sync:1] [t=0] ok.",
-      "[sync:0] [t=0] stream ok.",
-      "[sync:1] [t=20] stream ok."
+      "[sync:0] [t=0] stream emit.",
+      "[sync:0] [t=10] stream completed.",
+      "[sync:1] [t=20] stream emit.",
+      "[sync:1] [t=30] stream completed."
     ]);
   });
 });

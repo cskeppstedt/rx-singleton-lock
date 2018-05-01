@@ -12,13 +12,13 @@ describe("rx-singleton-lock", () => {
       mExpectedSingletonA,
       mExpectedSingletonB
     ] = [
-      "a", // sourceA$ emits directly
-      "b", // sourceB$ emits directly
-      "--c|", // lock$ emits after a while
-      "--1", // result from syncing sourceA$ emits when lock has emitted
-      "--2", // result from syncing sourceB$ emits when lock has emitted
-      "--x|", // result from singletonA emits when lock$ has emitted
-      "--y" // result from singletonB emits when lock$ has emitted
+      "a|", // sourceA$ emits directly
+      "b|", // sourceB$ emits directly
+      "--c|", // lock$ emits and completes after a while
+      "---1|", // result from syncing sourceA$ emits when lock has completed
+      "---2|", // result from syncing sourceB$ emits when lock has completed
+      "--x|", // result from singletonA emits when lock$ has completed
+      "--y|" // result from singletonB emits when lock$ has completed
     ];
 
     const { lock, scheduler, errs, logs } = testContext();
@@ -56,12 +56,14 @@ describe("rx-singleton-lock", () => {
       "[sync:0] [t=0] waiting...",
       "[sync:1] [t=15] waiting...",
       "[singleton:1] [t=18] (ignored) waiting...",
-      "[singleton:0] [t=20] ok, unlocked.",
-      "[sync:0] [t=20] ok.",
-      "[sync:1] [t=20] ok.",
-      "[singleton:1] [t=20] (ignored) ok.",
-      "[sync:0] [t=20] stream ok.",
-      "[sync:1] [t=20] stream ok."
+      "[singleton:0] [t=30] stream completed, unlocked.",
+      "[sync:0] [t=30] ok.",
+      "[sync:1] [t=30] ok.",
+      "[singleton:1] [t=30] (ignored) stream completed.",
+      "[sync:0] [t=30] stream emit.",
+      "[sync:1] [t=30] stream emit.",
+      "[sync:0] [t=40] stream completed.",
+      "[sync:1] [t=40] stream completed."
     ]);
   });
 });
