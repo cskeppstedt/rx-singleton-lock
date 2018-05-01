@@ -2,22 +2,19 @@
   "name": "rx-singleton-lock",
   "version": "1.0.0",
   "description": "",
-  "files": [
-    "dist/index.js",
-    "dist/index.d.ts",
-    "dist/lib"
-  ],
+  "files": ["dist/index.js", "dist/index.d.ts", "dist/lib"],
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "start": "tsc -w -p .",
-    "format": "prettier --write package.json index.ts lib/**/* test/**/*",
-    "test": "mocha --require ts-node/register 'test/*.spec.ts'",
-    "test:watch": "npm run test -- --watch --watch-extensions ts",
-    "prepublishOnly": "npm run compile",
-    "compile": "npm run clean && tsc -p .",
-    "clean": "rm -rf dist",
-    "example": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "rm -rf dist && tsc -p .",
+    "format":
+      "prettier --write index.ts package.json webpack.config.js lib/**/* test/**/*",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "mocha --require ts-node/register 'test/unit/*.spec.ts'",
+    "test:unit:watch": "npm run test:unit -- --watch --watch-extensions ts",
+    "test:integration":
+      "mocha --require ts-node/register 'test/integration/*.spec.ts'"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +28,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^5.1.1",
     "prettier": "^1.12.1",
+    "puppeteer": "^1.3.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "rxjs": "^5.0.0",
