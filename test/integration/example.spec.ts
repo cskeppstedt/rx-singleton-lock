@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import * as puppeteer from "puppeteer";
 import elementsHtml from "../utils/elements-html";
-import * as integrationServer from "../utils/integration-server";
 
 describe("integration example", () => {
   let browser: puppeteer.Browser;
@@ -9,12 +8,10 @@ describe("integration example", () => {
   let consoleLogs: Array<string>;
 
   before(async () => {
-    await integrationServer.start();
     browser = await puppeteer.launch({ args: ["--no-sandbox"] });
   });
   after(async () => {
     await browser.close();
-    await integrationServer.stop();
   });
   beforeEach(async () => {
     consoleLogs = [];
