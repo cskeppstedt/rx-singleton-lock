@@ -59,6 +59,6 @@
     "webpack-serve": "^0.3.2"
   },
   "peerDependencies": {
-    "rxjs": ">=6.0.0"
+    "rxjs": ">=6.0.0 <7.0.0"
   }
 }
