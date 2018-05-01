@@ -12,11 +12,11 @@ describe("rx-singleton-lock", () => {
       mExpectedSingletonA,
       mExpectedSingletonB
     ] = [
-      "a", // sourceA$ emits directly
-      "b", // sourceB$ emits directly
+      "a|", // sourceA$ emits directly
+      "b|", // sourceB$ emits directly
       "--c|", // lock$ emits after a while
-      "--1", // result from syncing sourceA$ emits when lock has emitted
-      "--2", // result from syncing sourceB$ emits when lock has emitted
+      "--1|", // result from syncing sourceA$ emits when lock has emitted
+      "--2|", // result from syncing sourceB$ emits when lock has emitted
       "--x|", // result from singletonA emits when lock$ has emitted
       "--y" // result from singletonB emits when lock$ has emitted
     ];
@@ -56,12 +56,14 @@ describe("rx-singleton-lock", () => {
       "[sync:0] [t=0] waiting...",
       "[sync:1] [t=15] waiting...",
       "[singleton:1] [t=18] (ignored) waiting...",
-      "[singleton:0] [t=20] ok, unlocked.",
+      "[singleton:0] [t=20] stream emit, unlocked.",
       "[sync:0] [t=20] ok.",
       "[sync:1] [t=20] ok.",
       "[singleton:1] [t=20] (ignored) ok.",
-      "[sync:0] [t=20] stream ok.",
-      "[sync:1] [t=20] stream ok."
+      "[sync:0] [t=20] stream emit.",
+      "[sync:1] [t=20] stream emit.",
+      "[sync:0] [t=30] stream complete.",
+      "[sync:1] [t=30] stream complete."
     ]);
   });
 });

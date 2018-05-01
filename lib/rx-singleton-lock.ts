@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 import { ReplaySubject } from "rxjs/ReplaySubject";
 import { TraceErr, TraceLog, createLog, createErr } from "./utils/tracing";
 import "rxjs/add/operator/do";
-import "rxjs/add/operator/mergeMap";
+import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/take";
 import counter from "./utils/counter";
 
@@ -45,7 +45,7 @@ export default class RxSingletonLock {
 
     return createObservable().do(
       value => {
-        this.log(seq, "singleton", "ok, unlocked.");
+        this.log(seq, "singleton", "stream emit, unlocked.");
         this.isLocked = false;
         this.syncSubject.next(value);
       },
@@ -63,8 +63,9 @@ export default class RxSingletonLock {
       const obs = createObservable();
 
       return obs.do(
-        () => this.log(seq, "sync", "stream ok."),
-        () => this.log(seq, "sync", "stream failed.")
+        () => this.log(seq, "sync", "stream emit."),
+        () => this.log(seq, "sync", "stream failed."),
+        () => this.log(seq, "sync", "stream complete.")
       );
     };
 
@@ -73,7 +74,7 @@ export default class RxSingletonLock {
       return runStream();
     } else {
       this.log(seq, "sync", "waiting...");
-      return this.syncSubject.mergeMap(() => {
+      return this.syncSubject.take(1).switchMap(() => {
         this.log(seq, "sync", "ok.");
         return runStream();
       });

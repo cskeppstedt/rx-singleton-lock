@@ -5,11 +5,11 @@ var test_context_1 = require("./utils/test-context");
 describe("rx-singleton-lock", function () {
     it("should support syncing and locking", function () {
         var _a = [
-            "a",
-            "b",
+            "a|",
+            "b|",
             "--c|",
-            "--1",
-            "--2",
+            "--1|",
+            "--2|",
             "--x|",
             "--y" // result from singletonB emits when lock$ has emitted
         ], mSourceA = _a[0], mSourceB = _a[1], mLock = _a[2], mExpectedA = _a[3], mExpectedB = _a[4], mExpectedSingletonA = _a[5], mExpectedSingletonB = _a[6];
