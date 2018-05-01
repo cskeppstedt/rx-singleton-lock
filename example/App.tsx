@@ -66,6 +66,7 @@ class Example extends React.Component<ExampleProps, ExampleState> {
   }
 
   handleReset() {
+    console.clear();
     valueCounter = 0;
     this.setState({
       log: [],
