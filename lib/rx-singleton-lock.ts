@@ -33,7 +33,7 @@ export default class RxSingletonLock {
     this.isLocked = false;
   }
 
-  public singleton<T>(createObservable: CreateObservable<T>): Observable<T> {
+  public singleton<T>(lock$: Observable<T>): Observable<T> {
     const seq = this.counters.singleton.next();
 
     if (this.isLocked) {
@@ -50,7 +50,7 @@ export default class RxSingletonLock {
     this.log(seq, "singleton", "locked.");
     this.isLocked = true;
     this.syncSubject = new ReplaySubject(1, undefined, this.scheduler);
-    this.lockSubject = createObservable().pipe(share());
+    this.lockSubject = lock$.pipe(share());
 
     return this.lockSubject.pipe(
       tap(
@@ -69,10 +69,10 @@ export default class RxSingletonLock {
     );
   }
 
-  public sync<T>(createObservable: CreateObservable<T>): Observable<T> {
+  public sync<T>(stream$: Observable<T>): Observable<T> {
     const seq = this.counters.sync.next();
     const runStream = () =>
-      createObservable().pipe(
+      stream$.pipe(
         tap(
           () => this.log(seq, "sync", "stream emit."),
           () => this.log(seq, "sync", "stream failed."),

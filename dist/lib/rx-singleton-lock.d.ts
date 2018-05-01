@@ -15,6 +15,6 @@ export default class RxSingletonLock {
     private syncSubject;
     private lockSubject;
     constructor({scheduler, traceLog, traceErr}?: InitOptions);
-    singleton<T>(createObservable: CreateObservable<T>): Observable<T>;
-    sync<T>(createObservable: CreateObservable<T>): Observable<T>;
+    singleton<T>(lock$: Observable<T>): Observable<T>;
+    sync<T>(stream$: Observable<T>): Observable<T>;
 }

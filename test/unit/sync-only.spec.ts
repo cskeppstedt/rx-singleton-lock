@@ -14,10 +14,10 @@ describe("rx-singleton-lock", () => {
     const sourceA$ = scheduler.createColdObservable(mSourceA);
     const sourceB$ = scheduler.createColdObservable(mSourceB);
 
-    const resultSourceA$ = lock.sync(() => sourceA$);
+    const resultSourceA$ = lock.sync(sourceA$);
     scheduler.expectObservable(resultSourceA$).toBe(mExpectedA, { "1": "a" });
 
-    const resultSourceB$ = lock.sync(() => sourceB$);
+    const resultSourceB$ = lock.sync(sourceB$);
     scheduler.expectObservable(resultSourceB$).toBe(mExpectedB, { "2": "b" });
 
     // run tests

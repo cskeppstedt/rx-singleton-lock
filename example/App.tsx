@@ -1,40 +1,39 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Observable, forkJoin, of } from "rxjs";
+import { forkJoin, Observable, of } from "rxjs";
 import { delay, tap } from "rxjs/operators";
 import RxSingletonLock from "../lib/rx-singleton-lock";
 
-interface ExampleProps {}
-interface ExampleState {
-  log: Array<string>;
+interface IExampleState {
   lock: RxSingletonLock;
+  log: string[];
   lockDuration: number | "";
 }
 
 let valueCounter = 0;
 const defaultLockDuration = 3000;
 
-class Example extends React.Component<ExampleProps, ExampleState> {
+class Example extends React.Component<{}, IExampleState> {
   constructor(props) {
     super(props);
     this.state = {
-      lockDuration: "",
-      log: [],
       lock: new RxSingletonLock({
         traceErr: this.appendLog.bind(this),
         traceLog: this.appendLog.bind(this)
-      })
+      }),
+      lockDuration: "",
+      log: []
     };
   }
 
-  appendLog(msg) {
+  public appendLog(msg) {
     this.setState(s => ({ log: [...s.log, msg] }));
   }
 
-  handleSync() {
+  public handleSync() {
     const value = valueCounter++;
     this.state.lock
-      .sync(() => of(value))
+      .sync(of(value))
       .subscribe(
         n => console.log(`(sync) ${value}, got value: ${n}`),
         e => console.error(`(sync) ${value}, got err: ${e}`),
@@ -42,11 +41,11 @@ class Example extends React.Component<ExampleProps, ExampleState> {
       );
   }
 
-  handleForkJoinSync() {
+  public handleForkJoinSync() {
     const value = valueCounter++;
     forkJoin(
-      this.state.lock.sync(() => of(20).pipe(delay(600))),
-      this.state.lock.sync(() => of(10).pipe(delay(100)))
+      this.state.lock.sync(of(20).pipe(delay(600))),
+      this.state.lock.sync(of(10).pipe(delay(100)))
     ).subscribe(
       n => console.log(`(forkJoin-sync) ${value}, got value: ${n}`),
       e => console.error(`(forkJoin-sync) ${value}, got err: ${e}`),
@@ -54,10 +53,10 @@ class Example extends React.Component<ExampleProps, ExampleState> {
     );
   }
 
-  handleLock() {
+  public handleLock() {
     const value = valueCounter++;
     this.state.lock
-      .singleton(() =>
+      .singleton(
         of(value).pipe(
           delay(
             this.state.lockDuration === ""
@@ -73,25 +72,25 @@ class Example extends React.Component<ExampleProps, ExampleState> {
       );
   }
 
-  handleReset() {
+  public handleReset() {
     console.clear();
     valueCounter = 0;
     this.setState({
-      log: [],
       lock: new RxSingletonLock({
         traceErr: this.appendLog.bind(this),
         traceLog: this.appendLog.bind(this)
-      })
+      }),
+      log: []
     });
   }
 
-  handleSetLockDuration(e: React.ChangeEvent<HTMLInputElement>) {
+  public handleSetLockDuration(e: React.ChangeEvent<HTMLInputElement>) {
     const text = e.target.value.trim();
-    const lockDuration = text === "" ? text : parseInt(text) || 0;
+    const lockDuration = text === "" ? text : parseInt(text, 10) || 0;
     this.setState(s => ({ ...s, lockDuration }));
   }
 
-  render() {
+  public render() {
     return (
       <div>
         <button data-id="sync" onClick={this.handleSync.bind(this)}>

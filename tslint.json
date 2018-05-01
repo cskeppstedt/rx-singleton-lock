@@ -2,6 +2,8 @@
   "extends": ["tslint:latest", "tslint-config-prettier"],
   "rulesDirectory": ["node_modules/rxjs-tslint"],
   "rules": {
+    "no-console": false,
+    "no-implicit-dependencies": false,
     "no-submodule-imports": false,
     "rxjs-collapse-imports": true,
     "rxjs-pipeable-operators-only": true,

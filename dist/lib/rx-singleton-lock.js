@@ -12,7 +12,7 @@ var RxSingletonLock = /** @class */ (function () {
         this.counters = { sync: counter_1.default(), singleton: counter_1.default() };
         this.isLocked = false;
     }
-    RxSingletonLock.prototype.singleton = function (createObservable) {
+    RxSingletonLock.prototype.singleton = function (lock$) {
         var _this = this;
         var seq = this.counters.singleton.next();
         if (this.isLocked) {
@@ -22,7 +22,7 @@ var RxSingletonLock = /** @class */ (function () {
         this.log(seq, "singleton", "locked.");
         this.isLocked = true;
         this.syncSubject = new rxjs_1.ReplaySubject(1, undefined, this.scheduler);
-        this.lockSubject = createObservable().pipe(operators_1.share());
+        this.lockSubject = lock$.pipe(operators_1.share());
         return this.lockSubject.pipe(operators_1.tap(tracing_1.noop, function (e) {
             _this.err(seq, "singleton", "stream failed, unlocking.", e);
             _this.isLocked = false;
@@ -33,11 +33,11 @@ var RxSingletonLock = /** @class */ (function () {
             _this.syncSubject.next(null);
         }));
     };
-    RxSingletonLock.prototype.sync = function (createObservable) {
+    RxSingletonLock.prototype.sync = function (stream$) {
         var _this = this;
         var seq = this.counters.sync.next();
         var runStream = function () {
-            return createObservable().pipe(operators_1.tap(function () { return _this.log(seq, "sync", "stream emit."); }, function () { return _this.log(seq, "sync", "stream failed."); }, function () { return _this.log(seq, "sync", "stream completed."); }));
+            return stream$.pipe(operators_1.tap(function () { return _this.log(seq, "sync", "stream emit."); }, function () { return _this.log(seq, "sync", "stream failed."); }, function () { return _this.log(seq, "sync", "stream completed."); }));
         };
         if (!this.isLocked) {
             this.log(seq, "sync", "ok.");
