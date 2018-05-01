@@ -18,7 +18,7 @@ describe("rx-singleton-lock", () => {
       "--1|", // result from syncing sourceA$ emits when lock has emitted
       "--2|", // result from syncing sourceB$ emits when lock has emitted
       "--x|", // result from singletonA emits when lock$ has emitted
-      "--y" // result from singletonB emits when lock$ has emitted
+      "--y|" // result from singletonB emits when lock$ has emitted
     ];
 
     const { lock, scheduler, errs, logs } = testContext();

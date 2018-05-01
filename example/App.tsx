@@ -36,21 +36,21 @@ class Example extends React.Component<ExampleProps, ExampleState> {
     this.state.lock
       .sync(() => Observable.of(value))
       .subscribe(
-        n => this.appendLog(`(sync) ${value}, got value: ${n}`),
-        e => this.appendLog(`(sync) ${value}, got err: ${e}`),
-        () => this.appendLog(`(sync) ${value}, completed`)
+        n => console.log(`(sync) ${value}, got value: ${n}`),
+        e => console.error(`(sync) ${value}, got err: ${e}`),
+        () => console.log(`(sync) ${value}, completed`)
       );
   }
 
   handleForkJoinSync() {
     const value = valueCounter++;
     Observable.forkJoin(
-      this.state.lock.sync(() => Observable.of(20).delay(200)),
+      this.state.lock.sync(() => Observable.of(20).delay(600)),
       this.state.lock.sync(() => Observable.of(10).delay(100))
     ).subscribe(
-      n => this.appendLog(`(forkJoin-sync) ${value}, got value: ${n}`),
-      e => this.appendLog(`(forkJoin-sync) ${value}, got err: ${e}`),
-      () => this.appendLog(`(forkJoin-sync) ${value}, completed`)
+      n => console.log(`(forkJoin-sync) ${value}, got value: ${n}`),
+      e => console.error(`(forkJoin-sync) ${value}, got err: ${e}`),
+      () => console.log(`(forkJoin-sync) ${value}, completed`)
     );
   }
 
@@ -59,9 +59,9 @@ class Example extends React.Component<ExampleProps, ExampleState> {
     this.state.lock
       .singleton(() => Observable.of(value).delay(3000))
       .subscribe(
-        n => this.appendLog(`(lock) ${value}, got value: ${n}`),
-        e => this.appendLog(`(lock) ${value}, got err: ${e}`),
-        () => this.appendLog(`(lock) ${value}, completed`)
+        n => console.log(`(lock) ${value}, got value: ${n}`),
+        e => console.error(`(lock) ${value}, got err: ${e}`),
+        () => console.log(`(lock) ${value}, completed`)
       );
   }
 

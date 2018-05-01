@@ -18,7 +18,7 @@ describe("rx-singleton-lock", () => {
       "--1", // result from syncing sourceA$ emits when lock has emitted
       "--2|", // result from syncing sourceB$ emits when lock has emitted
       "--#", // result from singletonA emits when lock$ has emitted
-      "--y" // result from singletonB emits when lock$ has emitted
+      "--#" // result from singletonB emits when lock$ has emitted
     ];
 
     const { lock, scheduler, errs, logs } = testContext();
@@ -50,7 +50,10 @@ describe("rx-singleton-lock", () => {
 
     // run tests
     scheduler.flush();
-    expect(errs).to.eql(["[singleton:0] [t=20] stream failed, unlocking."]);
+    expect(errs).to.eql([
+      "[singleton:0] [t=20] stream failed, unlocking.",
+      "[singleton:1] [t=20] (ignored) stream failed."
+    ]);
     expect(logs).to.eql([
       "[singleton:0] [t=0] locked.",
       "[sync:0] [t=0] waiting...",
@@ -58,7 +61,6 @@ describe("rx-singleton-lock", () => {
       "[singleton:1] [t=18] (ignored) waiting...",
       "[sync:0] [t=20] ok.",
       "[sync:1] [t=20] ok.",
-      "[singleton:1] [t=20] (ignored) ok.",
       "[sync:0] [t=20] stream emit.",
       "[sync:1] [t=20] stream emit.",
       "[sync:1] [t=30] stream complete."
