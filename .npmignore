@@ -1,3 +1,4 @@
+bin
 example
 lib
 test
@@ -8,4 +9,4 @@ dist/test
 .travis.yml
 index.ts
 tsconfig.json
-webpack.config.js
+tslint.json
