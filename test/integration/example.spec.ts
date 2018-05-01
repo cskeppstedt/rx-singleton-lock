@@ -10,7 +10,7 @@ describe("integration example", () => {
 
   before(async () => {
     await integrationServer.start();
-    browser = await puppeteer.launch({ headless: false });
+    browser = await puppeteer.launch({ args: ["--no-sandbox"] });
   });
   after(async () => {
     await browser.close();
