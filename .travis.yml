@@ -4,10 +4,12 @@ node_js:
 before_script: 
   - npm run format
   - npm run build
-  - npm run serve &
+  - ./bin/start_serve.sh
 script:
   - npm test
   - ./bin/check_git_clean.sh
+after_script:
+  - ./bin/stop_serve.sh
 deploy:
   provider: npm
   email: c.skeppstedt@gmail.com
