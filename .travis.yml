@@ -1,11 +1,11 @@
 language: node_js
 node_js:
 - '8'
+before_script: 
+  - npm start &
+  - sleep 3
+before_deploy: "npm run format && npm run build && git diff-index --quiet HEAD && npm test"
 deploy:
-  before_script: 
-    - npm start &
-    - sleep 3
-  before_deploy: "npm run format && npm run build && git diff-index --quiet HEAD && npm test"
   provider: npm
   email: c.skeppstedt@gmail.com
   api_key:
