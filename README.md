@@ -18,18 +18,24 @@ import { concat, of, pipe } from "rxjs";
 import { delay, tap } from "rxjs/operators";
 import RxSingletonLock from "rx-singleton-lock";
 
+const lock = new RxSingletonLock({
+  traceErr: console.error.bind(console),
+  traceLog: console.log.bind(console)
+});
+
 const dummyRequest$ = str => of(str).pipe(tap(v => console.log(v)));
-const dummyLock$ = () => of("locked").pipe(delay(2000));
+const dummyLock$ = () => of("locked").pipe(delay(3000));
 
 concat(
+  lock.sync(dummyRequest$("request0")),
   lock.sync(dummyRequest$("request1")),
-  lock.sync(dummyRequest$("request2")),
   lock.singleton(dummyLock$()),
-  lock.sync(dummyRequest$("request3"))
+  lock.sync(dummyRequest$("request2"))
 ).subscribe();
 ```
 
-Notice in the console that `request3` will be delayed until the lock has completed (2 seconds).
+Notice in the console that `request2` will be delayed until the lock has completed
+(after 3 seconds).
 
 ## API
 
