@@ -1,4 +1,4 @@
-import { TestScheduler } from "rxjs";
+import { TestScheduler } from "rxjs/testing";
 import RxSingletonLock from "../../lib/rx-singleton-lock";
 declare const _default: () => {
     lock: RxSingletonLock;

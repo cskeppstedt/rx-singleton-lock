@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
-var test_context_1 = require("./utils/test-context");
+var test_context_1 = require("../utils/test-context");
 describe("rx-singleton-lock", function () {
     it("should unblock syncs when the lock stream throws", function () {
         var _a = [
