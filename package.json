@@ -1,26 +1,32 @@
 {
   "name": "rx-singleton-lock",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "scripts": {
     "serve": "webpack-serve --config ./example/webpack.config.js --port 8080",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
-    "format":
-      "prettier --write index.ts package.json webpack.config.js lib/**/* test/**/*",
+    "format": "prettier --write index.ts package.json webpack.config.js lib/**/* test/**/*",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "npm run lint && npm run test:unit && npm run test:integration",
     "test:unit": "mocha --require ts-node/register 'test/unit/*.spec.ts'",
     "test:unit:watch": "npm run test:unit -- --watch --watch-extensions ts",
-    "test:integration":
-      "mocha --timeout 60000 --require ts-node/register 'test/integration/*.spec.ts'",
-    "test:integration:watch":
-      "npm run test:integration -- --watch --watch-extensions ts"
+    "test:integration": "mocha --timeout 60000 --require ts-node/register 'test/integration/*.spec.ts'",
+    "test:integration:watch": "npm run test:integration -- --watch --watch-extensions ts"
   },
   "description": "A small util that provides singleton locks for rxjs streams.",
   "license": "MIT",
-  "files": ["dist/index.js", "dist/index.d.ts", "dist/lib"],
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts",
+    "dist/lib"
+  ],
   "main": "dist/index",
   "typings": "dist/index.d.ts",
-  "keywords": ["rxjs", "lock", "mutex", "semaphore"],
+  "keywords": [
+    "rxjs",
+    "lock",
+    "mutex",
+    "semaphore"
+  ],
   "author": "Christoffer Skeppstedt",
   "repository": {
     "type": "git",
@@ -28,7 +34,9 @@
   },
   "homepage": "https://github.com/cskeppstedt/rx-singleton-lock",
   "bugs": "https://github.com/cskeppstedt/rx-singleton-lock",
-  "contributors": ["Christoffer Skepptsedt (https://chsk.se)"],
+  "contributors": [
+    "Christoffer Skepptsedt (https://chsk.se)"
+  ],
   "engines": {
     "node": ">=8.0.0"
   },
