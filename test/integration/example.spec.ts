@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import * as puppeteer from "puppeteer";
 import elementsHtml from "../utils/elements-html";
+import ignoreLogMessage from "../utils/ignore-log-message";
 
 describe("integration example", () => {
   let browser: puppeteer.Browser;
@@ -18,7 +19,7 @@ describe("integration example", () => {
     page = await browser.newPage();
     page.on("console", msg => {
       const text = msg.text();
-      if (text.indexOf("Download the React DevTools") === -1) {
+      if (!ignoreLogMessage(text)) {
         consoleLogs.push(text);
       }
     });
