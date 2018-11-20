@@ -1,21 +1,21 @@
 language: node_js
 node_js:
 - '8'
-before_script: 
-  - npm run format
-  - npm run build
-  - ./bin/start_serve.sh
+before_script:
+- npm run format
+- npm run build
+- ./bin/start_serve.sh
 script:
-  - npm test
-  - ./bin/check_git_clean.sh
+- npm test
+- ./bin/check_git_clean.sh
 after_script:
-  - ./bin/stop_serve.sh
+- ./bin/stop_serve.sh
 deploy:
   skip_cleanup: true
   provider: npm
   email: c.skeppstedt@gmail.com
   api_key:
-    secure: c2odWUQpi/D+OjcKAYy0ovRrdSuitXBHTOeO/YuaNfdmE3FvDSKJA5bkwhL15DQp73IcRk5a0IxJLE/rFQ4qtLMYadF8qVjDYDigoTd5XN9nxVJ2JGAgPw6ZwajtC1H/ri4epilFzmaJftfOAOSkKtPLPBEBryO1X14F9ZtmaYR/R09ocxEgLAypJwXxLT6TidB6uFNZ2wO4+J6DuPh4CwDZDUIRs8LXrR669hUYklfA7gFQhq9DVpqBeNh/LvD9PEGyYu6pACEuT+zcEBfM/q+ixg2AcBNZ3t+4GSUkGVMkJJSz3ofyPn9E15vArVFjxOfED+OSImtO4NSKUBuzFNxP1715x/er9gqmoy0D7h93l9derxEVity4Nkt6BAOn1KXF90OJCUSwXzukNqn1PL1Nya8pmpMzsI+D4W8QYLviZGN5LksN7k9sI2EBtsECUcPnBxss3RGGuKDOSh17Ffa2FUoPjSas45HkDzofb2BFTzSHajZ5uddLIWe8qLqWB8JXCeofsdRtjg1pVc06ArfBekVu2d6/1pfzmXs5de0sLRl8hcOD3JL7/exR33wQb+40FO9Pyk9MHyB/d73d2fPztclR/ZjG1sbNM01D1d0qSJAyiZKkrKS1YUyW/7B31ebl2oScAftmianfLUm5fk5dRG5mqWTbrVThKOefN54=
+    secure: C5cBS1Qblp87NnHaAxWwVqGaUMo2afPkg5YUymQFGT8ILtzbrLjD77TJW2aG2CmSXbUx+it73nLLtBfqv5OemTrNd165ez1j5V4hgikgPOlK2rvne/IebMdpFVeyh4C6ippgGkek9AUPSIvlFwgAWi1TtL369pS8ozJl3MLqFJ0EbEC0j660S5e8Zu4TUivjYRK5W1C3aSRw7OlwzQdie8vuKVvKpKtgiM0tyfAaM3UG+d839gXtis2aI+pCeGioH6Db0RN3T4R14f144j86X2R6zEjhZeLBh6d2WUjtQeEyalCPiBiwUJDUvmJfET/IYmL4f8eqCM/8pmXAx5rduqECXLEF76XWCDekj/3itPg8VqkUAs0Unk+iHCSOQcaw4D580umkcS3GzSwKG63U+zvjAIdPfb0HnVXr2/f5K8dik1xjp2C1L8+P+Wwi1xcMf1LvGI2/6z0I/EZJiSIljE8WrZj/iRnlSfcl8we4eh8v62UnKTB/PDRmitZ9jEfp9+gCrZSDK+sBxnlYbh2pKywEGXs+uAoXecWICOWxiNZNc5VKnOTgTqSm1+pkehisXH4VfQ9uMYxa/TVirILUzCk33HB/cf57AmGKZBj4b4xbhrxj7ODAPaIO005HmKWeyoQ4F1ko0adPtPrJAZVZzdy6BPF9tzwi8NchDSdpchg=
   on:
     tags: true
     repo: cskeppstedt/rx-singleton-lock
