@@ -1,6 +1,6 @@
 {
   "name": "rx-singleton-lock",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {
     "serve": "webpack-serve --config ./example/webpack.config.js --port 8080",
     "build": "rm -rf dist && tsc -p tsconfig.build.json",
