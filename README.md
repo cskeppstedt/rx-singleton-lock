@@ -49,13 +49,15 @@ new RxSingletonLock({
 })
 ```
 
-`scheduler` (optional) Specifies the Rx scheduler to use (mostly for unit testing purposes).
+`scheduler: Scheduler` (optional) Specifies the Rx scheduler to use (mostly for unit testing purposes).
 
-`traceLog` (optional) If specified, it will be used in a _trace-tap_ that is attached
-inside `sync` and `singleton` to provide debug information.
+`traceLog: (message: string) => any` (optional) If specified, it will be used in a
+[tap](https://rxjs.dev/api/operators/tap) that is attached inside `sync` and `singleton`
+to provide debug information.
 
-`traceErr` (optional) If specified, it will be used in a _trace-tap_ that is attached
-inside `sync` and `singleton` to provide debug information.
+`traceErr: (message: string, e: Error) => any` (optional) If specified, it will be used in a
+[tap](https://rxjs.dev/api/operators/tap) that is attached inside `sync` and `singleton`
+to provide debug information.
 
 ### sync(stream$)
 
@@ -74,12 +76,13 @@ Once unlocked it will `switchMap` to the original `stream$` with a _trace-tap_.
 singleton(lock$: Observable<T>): Observable<T>
 ```
 
-**If the lock is unlocked:** returns a `share()` version of `lock$`, with a _trace-tap_.
+**If the lock is unlocked:** returns a [shared](https://rxjs.dev/api/operators/share) `lock$`
+with an attached tap for logging (see constructor arguments).
 The lock is now considered **locked** until `lock$` is **completed**.
 
-**If the lock is locked:** returns the shared `lock$` that is currently holding the
-lock, with a _trace-tap_. This `lock$` passed as an argument will be discarded and
-never subscribed to.
+**If the lock is locked:** returns the [shared](https://rxjs.dev/api/operators/share) `lock$`
+that is currently holding the lock, with an attached tap for logging (see constructor arguments).
+The given `lock$` argument will be discarded and never subscribed to.
 
 ## Description
 
