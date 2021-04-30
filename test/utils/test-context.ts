@@ -9,7 +9,7 @@ export default () => {
   const lock = new RxSingletonLock({
     scheduler,
     traceErr: (msg: string, e: Error) => errs.push(msg),
-    traceLog: (msg: string) => logs.push(msg)
+    traceLog: (msg: string) => logs.push(msg),
   });
   return { lock, logs, errs, scheduler };
 };

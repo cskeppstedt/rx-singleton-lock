@@ -17,7 +17,7 @@ describe("integration example", () => {
   beforeEach(async () => {
     consoleLogs = [];
     page = await browser.newPage();
-    page.on("console", msg => {
+    page.on("console", (msg) => {
       const text = msg.text();
       if (!ignoreLogMessage(text)) {
         consoleLogs.push(text);
@@ -44,11 +44,11 @@ describe("integration example", () => {
     expect(messages).to.eql([
       "[sync:0] ok.",
       "[sync:0] stream emit.",
-      "[sync:0] stream completed."
+      "[sync:0] stream completed.",
     ]);
     expect(consoleLogs).to.eql([
       "(sync) 0, got value: 0",
-      "(sync) 0, completed"
+      "(sync) 0, completed",
     ]);
   });
 
@@ -88,7 +88,7 @@ describe("integration example", () => {
       "[sync:3] ok.",
       "[sync:3] stream emit.",
       "[sync:3] stream completed.",
-      "[singleton:1] (ignored) stream completed."
+      "[singleton:1] (ignored) stream completed.",
     ]);
     expect(consoleLogs).to.eql([
       "(sync) 0, got value: 0",
@@ -102,7 +102,7 @@ describe("integration example", () => {
       "(sync) 5, got value: 5",
       "(sync) 5, completed",
       "(lock) 1, completed",
-      "(lock) 2, completed"
+      "(lock) 2, completed",
     ]);
   });
 });

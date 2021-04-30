@@ -10,7 +10,7 @@ describe("rx-singleton-lock", () => {
       mExpectedA,
       mExpectedB,
       mExpectedSingletonA,
-      mExpectedSingletonB
+      mExpectedSingletonB,
     ] = [
       "a|", // sourceA$ emits directly
       "b|", // sourceB$ emits directly
@@ -18,7 +18,7 @@ describe("rx-singleton-lock", () => {
       "---1|", // result from syncing sourceA$ emits when lock has completed
       "---2|", // result from syncing sourceB$ emits when lock has completed
       "--x|", // result from singletonA emits when lock$ has completed
-      "--y|" // result from singletonB emits when lock$ has completed
+      "--y|", // result from singletonB emits when lock$ has completed
     ];
 
     const { lock, scheduler, errs, logs } = testContext();
@@ -63,7 +63,7 @@ describe("rx-singleton-lock", () => {
       "[sync:0] [t=30] stream emit.",
       "[sync:1] [t=30] stream emit.",
       "[sync:0] [t=40] stream completed.",
-      "[sync:1] [t=40] stream completed."
+      "[sync:1] [t=40] stream completed.",
     ]);
   });
 });
