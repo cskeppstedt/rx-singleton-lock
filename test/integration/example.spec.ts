@@ -3,7 +3,7 @@ import * as puppeteer from "puppeteer";
 import elementsHtml from "../utils/elements-html";
 import ignoreLogMessage from "../utils/ignore-log-message";
 
-const examplePageUrl = "http://localhost:8080/example/dist/index.html";
+const examplePageUrl = "http://localhost:8080";
 
 describe("integration example", () => {
   let browser: puppeteer.Browser;
