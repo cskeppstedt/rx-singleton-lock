@@ -1,8 +1,8 @@
-import { Observable, Scheduler } from "rxjs";
+import { Observable, SchedulerLike } from "rxjs";
 import { TraceErr, TraceLog } from "./utils/tracing";
 export declare type CreateObservable<T> = () => Observable<T>;
 export interface InitOptions {
-    scheduler?: Scheduler;
+    scheduler?: SchedulerLike;
     traceErr?: TraceErr;
     traceLog?: TraceLog;
 }

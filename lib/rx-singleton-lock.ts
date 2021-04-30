@@ -1,4 +1,4 @@
-import { Observable, ReplaySubject, Scheduler } from "rxjs";
+import { Observable, ReplaySubject, SchedulerLike } from "rxjs";
 import { share, switchMap, take, tap } from "rxjs/operators";
 import counter from "./utils/counter";
 import {
@@ -6,13 +6,13 @@ import {
   createLog,
   noop,
   TraceErr,
-  TraceLog
+  TraceLog,
 } from "./utils/tracing";
 
 export type CreateObservable<T> = () => Observable<T>;
 
 export interface InitOptions {
-  scheduler?: Scheduler;
+  scheduler?: SchedulerLike;
   traceErr?: TraceErr;
   traceLog?: TraceLog;
 }
@@ -41,7 +41,7 @@ export default class RxSingletonLock {
       return this.lockSubject.pipe(
         tap(
           noop,
-          e => this.err(seq, "singleton", "(ignored) stream failed.", e),
+          (e) => this.err(seq, "singleton", "(ignored) stream failed.", e),
           () => this.log(seq, "singleton", "(ignored) stream completed.")
         )
       );
@@ -55,7 +55,7 @@ export default class RxSingletonLock {
     return this.lockSubject.pipe(
       tap(
         noop,
-        e => {
+        (e) => {
           this.err(seq, "singleton", "stream failed, unlocking.", e);
           this.isLocked = false;
           this.syncSubject.next(e);

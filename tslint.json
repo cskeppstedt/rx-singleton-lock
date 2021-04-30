@@ -5,6 +5,7 @@
     "no-console": false,
     "no-implicit-dependencies": false,
     "no-submodule-imports": false,
+    "interface-name": false,
     "rxjs-collapse-imports": true,
     "rxjs-pipeable-operators-only": true,
     "rxjs-no-static-observable-methods": true,

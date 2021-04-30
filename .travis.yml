@@ -1,15 +1,16 @@
 language: node_js
 node_js:
-- '8'
+  - node
+  - lts/*
 before_script:
-- npm run format
-- npm run build
-- ./bin/start_serve.sh
+  - npm run format
+  - npm run build
+  - ./bin/start_serve.sh
 script:
-- npm test
-- ./bin/check_git_clean.sh
+  - npm test
+  - ./bin/check_git_clean.sh
 after_script:
-- ./bin/stop_serve.sh
+  - ./bin/stop_serve.sh
 deploy:
   skip_cleanup: true
   provider: npm

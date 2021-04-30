@@ -7,7 +7,7 @@ describe("rx-singleton-lock", () => {
       "a|", // sourceA$ emits directly
       "--b|", // sourceB$ emits after a while
       "1|", // result from syncing sourceA$ emits when sourceA$ emits
-      "--2|" // result from syncing sourceB$ emits when sourceB$ emits
+      "--2|", // result from syncing sourceB$ emits when sourceB$ emits
     ];
 
     const { lock, scheduler, errs, logs } = testContext();
@@ -29,7 +29,7 @@ describe("rx-singleton-lock", () => {
       "[sync:0] [t=0] stream emit.",
       "[sync:0] [t=10] stream completed.",
       "[sync:1] [t=20] stream emit.",
-      "[sync:1] [t=30] stream completed."
+      "[sync:1] [t=30] stream completed.",
     ]);
   });
 });

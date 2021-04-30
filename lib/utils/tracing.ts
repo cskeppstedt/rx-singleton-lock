@@ -1,4 +1,4 @@
-import { Scheduler } from "rxjs";
+import { SchedulerLike } from "rxjs";
 
 export type TraceErr = (message: string, error: Error) => any;
 export type TraceLog = (message: string) => any;
@@ -14,15 +14,15 @@ const frameWithoutScheduler = (seq: number, method: methodType) =>
 const frameWithScheduler = (
   seq: number,
   method: methodType,
-  scheduler: Scheduler
+  scheduler: SchedulerLike
 ) => `${frameWithoutScheduler(seq, method)} [t=${scheduler.now()}]`;
 
-const createFormatter = (scheduler?: Scheduler) => {
+const createFormatter = (scheduler?: SchedulerLike) => {
   const frame = scheduler == null ? frameWithoutScheduler : frameWithScheduler;
   return (seq, method, msg) => `${frame(seq, method, scheduler)} ${msg}`;
 };
 
-export const createLog = (traceLog?: TraceLog, scheduler?: Scheduler) => {
+export const createLog = (traceLog?: TraceLog, scheduler?: SchedulerLike) => {
   if (traceLog == null) {
     return noop;
   } else {
@@ -32,7 +32,7 @@ export const createLog = (traceLog?: TraceLog, scheduler?: Scheduler) => {
   }
 };
 
-export const createErr = (traceErr?: TraceErr, scheduler?: Scheduler) => {
+export const createErr = (traceErr?: TraceErr, scheduler?: SchedulerLike) => {
   if (traceErr == null) {
     return noop;
   } else {
