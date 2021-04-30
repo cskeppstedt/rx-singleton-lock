@@ -5,12 +5,15 @@ node_js:
 before_script:
   - npm run format
   - npm run build
-  - ./bin/start_serve.sh
+  - ./node_modules/.bin/webpack --config example/webpack.config.js &
+  - export WEBPACK_SERVE_PID=$!
+  - echo "Started WEBPACK_SERVE_PID $WEBPACK_SERVE_PID"
 script:
   - npm test
   - ./bin/check_git_clean.sh
 after_script:
-  - ./bin/stop_serve.sh
+  - echo "Killing WEBPACK_SERVE_PID $WEBPACK_SERVE_PID"
+  - kill $WEBPACK_SERVE_PID
 deploy:
   skip_cleanup: true
   provider: npm
