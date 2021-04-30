@@ -3,6 +3,8 @@ import * as puppeteer from "puppeteer";
 import elementsHtml from "../utils/elements-html";
 import ignoreLogMessage from "../utils/ignore-log-message";
 
+const examplePageUrl = "http://localhost:8080/example/dist/index.html";
+
 describe("integration example", () => {
   let browser: puppeteer.Browser;
   let page: puppeteer.Page;
@@ -23,7 +25,7 @@ describe("integration example", () => {
         consoleLogs.push(text);
       }
     });
-    await page.goto("http://localhost:8080");
+    await page.goto(examplePageUrl);
   });
 
   it("should have 4 buttons", async () => {
