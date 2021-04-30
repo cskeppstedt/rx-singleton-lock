@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { forkJoin, Observable, of } from "rxjs";
-import { delay, tap } from "rxjs/operators";
+import { forkJoin, of } from "rxjs";
+import { delay } from "rxjs/operators";
 import RxSingletonLock from "../lib/rx-singleton-lock";
 
 interface IExampleState {
@@ -19,26 +19,24 @@ class Example extends React.Component<{}, IExampleState> {
     this.state = {
       lock: new RxSingletonLock({
         traceErr: this.appendLog.bind(this),
-        traceLog: this.appendLog.bind(this)
+        traceLog: this.appendLog.bind(this),
       }),
       lockDuration: "",
-      log: []
+      log: [],
     };
   }
 
   public appendLog(msg) {
-    this.setState(s => ({ log: [...s.log, msg] }));
+    this.setState((s) => ({ log: [...s.log, msg] }));
   }
 
   public handleSync() {
     const value = valueCounter++;
-    this.state.lock
-      .sync(of(value))
-      .subscribe(
-        n => console.log(`(sync) ${value}, got value: ${n}`),
-        e => console.error(`(sync) ${value}, got err: ${e}`),
-        () => console.log(`(sync) ${value}, completed`)
-      );
+    this.state.lock.sync(of(value)).subscribe(
+      (n) => console.log(`(sync) ${value}, got value: ${n}`),
+      (e) => console.error(`(sync) ${value}, got err: ${e}`),
+      () => console.log(`(sync) ${value}, completed`)
+    );
   }
 
   public handleForkJoinSync() {
@@ -47,8 +45,8 @@ class Example extends React.Component<{}, IExampleState> {
       this.state.lock.sync(of(20).pipe(delay(600))),
       this.state.lock.sync(of(10).pipe(delay(100)))
     ).subscribe(
-      n => console.log(`(forkJoin-sync) ${value}, got value: ${n}`),
-      e => console.error(`(forkJoin-sync) ${value}, got err: ${e}`),
+      (n) => console.log(`(forkJoin-sync) ${value}, got value: ${n}`),
+      (e) => console.error(`(forkJoin-sync) ${value}, got err: ${e}`),
       () => console.log(`(forkJoin-sync) ${value}, completed`)
     );
   }
@@ -66,8 +64,8 @@ class Example extends React.Component<{}, IExampleState> {
         )
       )
       .subscribe(
-        n => console.log(`(lock) ${value}, got value: ${n}`),
-        e => console.error(`(lock) ${value}, got err: ${e}`),
+        (n) => console.log(`(lock) ${value}, got value: ${n}`),
+        (e) => console.error(`(lock) ${value}, got err: ${e}`),
         () => console.log(`(lock) ${value}, completed`)
       );
   }
@@ -78,16 +76,16 @@ class Example extends React.Component<{}, IExampleState> {
     this.setState({
       lock: new RxSingletonLock({
         traceErr: this.appendLog.bind(this),
-        traceLog: this.appendLog.bind(this)
+        traceLog: this.appendLog.bind(this),
       }),
-      log: []
+      log: [],
     });
   }
 
   public handleSetLockDuration(e: React.ChangeEvent<HTMLInputElement>) {
     const text = e.target.value.trim();
     const lockDuration = text === "" ? text : parseInt(text, 10) || 0;
-    this.setState(s => ({ ...s, lockDuration }));
+    this.setState((s) => ({ ...s, lockDuration }));
   }
 
   public render() {
