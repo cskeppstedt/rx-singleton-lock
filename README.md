@@ -13,17 +13,17 @@ _Note: requires `rxjs@^6.0.0`._
 
 ## Usage
 
-```javascript
+```typescript
 import { concat, of, pipe } from "rxjs";
 import { delay, tap } from "rxjs/operators";
 import RxSingletonLock from "rx-singleton-lock";
 
 const lock = new RxSingletonLock({
   traceErr: console.error.bind(console),
-  traceLog: console.log.bind(console)
+  traceLog: console.log.bind(console),
 });
 
-const dummyRequest$ = str => of(str).pipe(tap(v => console.log(v)));
+const dummyRequest$ = (str) => of(str).pipe(tap((v) => console.log(v)));
 const dummyLock$ = () => of("locked").pipe(delay(3000));
 
 concat(
@@ -41,15 +41,15 @@ Notice in the console that `request2` will be delayed until the lock has complet
 
 ### constructor(options)
 
-```javascript
+```typescript
 new RxSingletonLock({
-  scheduler?: Scheduler;
+  scheduler?: SchedulerLike;
   traceLog?: (message: string) => any;
   traceErr?: (message: string, e: Error) => any;
 })
 ```
 
-`scheduler: Scheduler` (optional) Specifies the Rx scheduler to use (mostly for unit testing purposes).
+`scheduler: SchedulerLike` (optional) Specifies the Rx scheduler to use (mostly for unit testing purposes).
 
 `traceLog: (message: string) => any` (optional) If specified, it will be used in a
 [tap](https://rxjs.dev/api/operators/tap) that is attached inside `sync` and `singleton`
@@ -61,7 +61,7 @@ to provide debug information.
 
 ### sync(stream$)
 
-```javascript
+```typescript
 sync(stream$: Observable<T>): Observable<T>
 ```
 
@@ -72,7 +72,7 @@ Once unlocked it will `switchMap` to the original `stream$` with a _trace-tap_.
 
 ### singleton(lock$)
 
-```javascript
+```typescript
 singleton(lock$: Observable<T>): Observable<T>
 ```
 
