@@ -13,7 +13,7 @@ _Note: requires `rxjs@^6.0.0`._
 
 ## Usage
 
-```javascript
+```typescript
 import { concat, of, pipe } from "rxjs";
 import { delay, tap } from "rxjs/operators";
 import RxSingletonLock from "rx-singleton-lock";
@@ -61,7 +61,7 @@ to provide debug information.
 
 ### sync(stream$)
 
-```javascript
+```typescript
 sync(stream$: Observable<T>): Observable<T>
 ```
 
@@ -72,7 +72,7 @@ Once unlocked it will `switchMap` to the original `stream$` with a _trace-tap_.
 
 ### singleton(lock$)
 
-```javascript
+```typescript
 singleton(lock$: Observable<T>): Observable<T>
 ```
 
